@@ -1,0 +1,5 @@
+module.export = Object.freeze( {
+	COMODITIES: 'COMODITIES',
+	TRADING: 'TRADING',
+	CRYPTOCURRENCIES: 'CRYPTOCURRENCIES'
+} );
