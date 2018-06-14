@@ -1,7 +1,7 @@
 'use strict';
 
-require( '../node_utilities/polyfills' );
-require( '../node_utilities/api-response' );
+require( './node_utilities/polyfills' );
+require( './node_utilities/api-response' ).default;
 
 const path = require( 'path' );
 const helmet = require( 'helmet' );
@@ -9,7 +9,7 @@ const helmet = require( 'helmet' );
 const express = require( 'express' );
 const app = express();
 
-const config = require( 'config' );
+const config = require( './config' );
 const http_port = config.http.port;
 
 const mongoose = require( 'mongoose' );
@@ -22,8 +22,13 @@ app.use( helmet() );
  */
 mongoose.Promise = global.Promise;
 mongoose.plugin( require( 'mongoose-beautiful-unique-validation' ) );
-mongoose.connect( config.mongodb.url );
-mongoose.connection.on( 'error', console.error.bind( console, 'connection error:' ) );
+mongoose.connect( config.mongodb.url ).then(
+	() => {},
+	( error ) => {
+		console.error( 'Mongoose.connect failed.' );
+		console.log( error );
+	}
+);
 
 // Setup application routes
 require( './controllers' ).setup( app );

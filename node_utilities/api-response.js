@@ -1,7 +1,8 @@
 const http = require( 'http' );
+
 const HttpStatusCode = require( '../constants/http-status-codes' );
-const AppicationError = require( '../error' );
-const UserError = require( '../error/user-error' );
+const AppicationError = require( '../errors' );
+const UserError = require( '../errors/user-error' );
 
 class Response {
 	constructor( data, success ) {
