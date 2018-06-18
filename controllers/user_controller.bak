@@ -62,27 +62,29 @@ function login( request, response ) {
 
 	User.findOne( query )
 		.then( ( user ) => {
-			return user || Promise.reject( 'USER_NOT_FOUND' );
-		} )
-		.then( ( user ) => {
-			return user.compare_password( password ).then( ( match ) => {
-				if ( match ) {
-					return user.generate_token()
-						.then( ( user ) => {
-							response.setHeader( 'x-token', user.token );
-							response.api.send( {
-								authenticated: true
-							} );
-						} )
-				}
+			if ( user ) {
+				return user.compare_password( password )
+					.then( ( match ) => {
+						if ( match ) {
+							return user.generate_token()
+								.then( ( user ) => {
+									response.setHeader( 'x-token', user.token );
+									response.api.send( {
+										authenticated: true
+									} );
+								} )
+						}
 
-				return Promise.reject( 'PASSWORD_MATCH_FAILED' );
-			} );
-			// .catch( ( error ) => {
-			// 	// TODO: Log error
-			// 	invalid_credentials();
-			// } );
+						return Promise.reject( 'PASSWORD_MATCH_FAILED' );
 
+					} )
+				// .catch( ( error ) => {
+				// 	// TODO: Log error
+				// 	invalid_credentials();
+				// } );
+			}
+
+			return Promise.reject( 'USER_NOT_FOUND' );
 		} )
 		.catch( ( error ) => {
 			// TODO: Log error

@@ -5,6 +5,19 @@ const jwt = require( 'jsonwebtoken' );
 const SALT_I = 10;
 
 const user_schema = mongoose.Schema( {
+	Name: {
+		type: String,
+		require: true,
+		trim: true,
+	},
+
+	email: {
+		type: String,
+		require: true,
+		trim: true,
+		unique: 1
+	},
+
 	username: {
 		type: String,
 		require: true,
@@ -64,11 +77,12 @@ user_schema.methods.compare_password_sync = function ( password ) {
 	return bcrypt.compareSync( password, this.password );
 };
 
-user_schema.methods.generate_token = function ( ) {
+user_schema.methods.generate_token = function () {
 	let user = this;
 	let token = jwt.sign( user.id.toHexString(), config.JWT.SECRET );
 
 	user.token = token;
+	
 	return user.save();
 }
 
