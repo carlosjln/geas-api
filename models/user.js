@@ -1,5 +1,6 @@
 const mongoose = require( 'mongoose' );
 const bcrypt = require( 'bcrypt' );
+const jwt = require( 'jsonwebtoken' );
 
 const SALT_I = 10;
 
@@ -15,6 +16,11 @@ const user_schema = mongoose.Schema( {
 		type: String,
 		require: true,
 		minlength: [ 6, 'Su contraseña debe tener al menos 6 caractéres.' ]
+	},
+
+	token: {
+		type: String,
+		require: true
 	},
 
 	created: {
@@ -46,7 +52,7 @@ user_schema.statics.Error = Object.freeze( {
 } );
 
 // INSTANCE METHODS
-user_schema.methods.generate_hash = function ( password ) {
+user_schema.methods.hash_password = function ( password ) {
 	return bcrypt.hashSync( password, bcrypt.genSaltSync( SALT_I ), null );
 };
 
@@ -57,6 +63,14 @@ user_schema.methods.compare_password = function ( password ) {
 user_schema.methods.compare_password_sync = function ( password ) {
 	return bcrypt.compareSync( password, this.password );
 };
+
+user_schema.methods.generate_token = function ( ) {
+	let user = this;
+	let token = jwt.sign( user.id.toHexString(), config.JWT.SECRET );
+
+	user.token = token;
+	return user.save();
+}
 
 // HOOKS
 user_schema.pre( 'save', function ( next ) {
@@ -77,7 +91,7 @@ user_schema.pre( 'save', function ( next ) {
 				user.password = hash;
 				next();
 			} )
-		} )
+		} );
 	} else {
 		next();
 	}

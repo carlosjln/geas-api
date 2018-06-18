@@ -5,6 +5,7 @@ require( './node_utilities/api-response' ).default;
 
 const path = require( 'path' );
 const helmet = require( 'helmet' );
+const body_parser = require( 'body-parser' );
 
 const express = require( 'express' );
 const app = express();
@@ -16,6 +17,7 @@ const mongoose = require( 'mongoose' );
 
 app.enable( 'trust proxy' );
 app.use( helmet() );
+app.use( body_parser.json() );
 
 /**
  * Database setup

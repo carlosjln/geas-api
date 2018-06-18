@@ -16,5 +16,9 @@ module.exports = {
 	mongodb: {
 		url: 'mongodb://localhost/invest_app',
 		port: 27017
+	},
+
+	JWT: {
+		SECRET: '!7wR&Tha+LkIR?nIcA!8'
 	}
 };

@@ -16,5 +16,9 @@ module.exports = {
 	mongodb: {
 		url: process.env.DATABASE_URL,
 		port: process.env.DATABASE_PORT
+	},
+
+	JWT: {
+		SECRET: process.env.JWT_SECRET
 	}
 };
