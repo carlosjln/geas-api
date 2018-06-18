@@ -21,18 +21,4 @@ function UserError( code, message, details ) {
 UserError.prototype = Object.create( Error.prototype );
 UserError.prototype.constructor = Error;
 
-UserError.WrongPassword = ( function () {
-	function WrongPassword() {
-		UserError.call(this);
-
-		this.name = 'WrongPassword';
-		this.message = 'Contraseña incorecta.';
-	}
-
-	WrongPassword.prototype = Object.create( UserError.prototype );
-	WrongPassword.prototype.constructor = UserError;
-
-	return WrongPassword;
-} )()
-
 module.exports = UserError;

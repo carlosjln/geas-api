@@ -15,6 +15,9 @@ function setup_routes( express ) {
 
 function create( request, response ) {
 	let params = request.body;
+
+	let name = params.name;
+	let email = params.email;
 	let username = params.username;
 	let password = params.password;
 
@@ -23,25 +26,30 @@ function create( request, response ) {
 		} )
 		.then( ( user ) => {
 			if ( user ) {
-				return response.status( 500 ).send( {
-					message: 'Username already taken.'
-				} );
+				console.log( user );
+				response.status( HttpStatusCode.CONFLICT );
+				return response.api.send_error( new UserError( 'USERNAME_TAKEN' ) );
 			}
 
 			var new_user = new User();
+
+			new_user.name = name;
+			new_user.email = email;
 			new_user.username = username;
 			new_user.password = password;
 
-			new_user.save()
-				.then( function ( document ) {
-					response.status( 200 ).send( document );
-				} )
-				.catch( function ( error ) {
-					response.status( 500 ).send( error );
+			return new_user.save().then( function ( document ) {
+				response.status( HttpStatusCode.CREATED );
+				response.api.send( {
+					name: document.name,
+					email: document.email,
+					username: document.username
 				} );
+			} )
 		} )
 		.catch( ( error ) => {
-			response.status( 500 ).send( error );
+			// TODO: log error
+			response.status( HttpStatusCode.INTERNAL_SERVER_ERROR ).send_error( error );
 		} );
 }
 

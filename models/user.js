@@ -5,7 +5,7 @@ const jwt = require( 'jsonwebtoken' );
 const SALT_I = 10;
 
 const user_schema = mongoose.Schema( {
-	Name: {
+	name: {
 		type: String,
 		require: true,
 		trim: true,
@@ -47,23 +47,6 @@ const user_schema = mongoose.Schema( {
 	}
 } );
 
-// MODEL ERRORS
-user_schema.statics.Error = Object.freeze( {
-	WrongPassword: ( function () {
-		function WrongPassword() {
-			Error.captureStackTrace( this, this.constructor );
-
-			this.name = this.constructor.name;
-			this.message = 'Contraseña incorecta.';
-		}
-
-		WrongPassword.prototype = Object.create( Error.prototype );
-		WrongPassword.prototype.constructor = Error;
-
-		return WrongPassword;
-	} )()
-} );
-
 // INSTANCE METHODS
 user_schema.methods.hash_password = function ( password ) {
 	return bcrypt.hashSync( password, bcrypt.genSaltSync( SALT_I ), null );
@@ -82,7 +65,7 @@ user_schema.methods.generate_token = function () {
 	let token = jwt.sign( user.id.toHexString(), config.JWT.SECRET );
 
 	user.token = token;
-	
+
 	return user.save();
 }
 

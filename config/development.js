@@ -14,7 +14,7 @@ module.exports = {
 	},
 
 	mongodb: {
-		url: 'mongodb://localhost/invest_app',
+		url: 'mongodb://localhost/geas_api',
 		port: 27017
 	},
 
