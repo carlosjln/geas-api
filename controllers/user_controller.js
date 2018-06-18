@@ -26,7 +26,6 @@ function create( request, response ) {
 		} )
 		.then( ( user ) => {
 			if ( user ) {
-				console.log( user );
 				response.status( HttpStatusCode.CONFLICT );
 				return response.api.send_error( new UserError( 'USERNAME_TAKEN' ) );
 			}
@@ -90,7 +89,6 @@ function login( request, response ) {
 			// 	// TODO: Log error
 			// 	invalid_credentials();
 			// } );
-
 		} )
 		.catch( ( error ) => {
 			// TODO: Log error

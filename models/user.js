@@ -2,6 +2,8 @@ const mongoose = require( 'mongoose' );
 const bcrypt = require( 'bcrypt' );
 const jwt = require( 'jsonwebtoken' );
 
+const config = require( '../config' );
+
 const SALT_I = 10;
 
 const user_schema = mongoose.Schema( {
@@ -61,12 +63,10 @@ user_schema.methods.compare_password_sync = function ( password ) {
 };
 
 user_schema.methods.generate_token = function () {
-	let user = this;
-	let token = jwt.sign( user.id.toHexString(), config.JWT.SECRET );
-
-	user.token = token;
-
-	return user.save();
+	let token = jwt.sign( this.id, config.JWT.SECRET );
+	this.token = token;
+	
+	return this.save();
 }
 
 // HOOKS
