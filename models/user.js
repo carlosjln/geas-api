@@ -2,6 +2,7 @@ const mongoose = require( 'mongoose' );
 const bcrypt = require( 'bcrypt' );
 const jwt = require( 'jsonwebtoken' );
 
+const ObjectId = mongoose.Types.ObjectId;
 const config = require( '../config' );
 
 const SALT_I = 10;
@@ -65,9 +66,24 @@ user_schema.methods.compare_password_sync = function ( password ) {
 user_schema.methods.generate_token = function () {
 	let token = jwt.sign( this.id, config.JWT.SECRET );
 	this.token = token;
-	
+
 	return this.save();
 }
+
+// STATIC METHODS
+user_schema.statics.find_by_token = function ( token ) {
+	return new Promise( ( resolve, reject ) => {
+		let callback = ( error, decode ) => {
+			console.log( decode );
+			resolve( User.findOne( {
+				'id': ObjectId(decode),
+				'token': token
+			} ) )
+		}
+
+		jwt.verify( token, config.JWT.SECRET, callback );
+	} );
+};
 
 // HOOKS
 user_schema.pre( 'save', function ( next ) {

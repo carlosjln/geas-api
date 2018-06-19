@@ -74,21 +74,16 @@ function login( request, response ) {
 		.then( ( user ) => {
 			return user.compare_password( password ).then( ( match ) => {
 				if ( match ) {
-					return user.generate_token()
-						.then( ( user ) => {
-							response.setHeader( 'x-token', user.token );
-							response.api.send( {
-								authenticated: true
-							} );
-						} )
+					return user.generate_token().then( ( user ) => {
+						response.setHeader( 'x-token', user.token );
+						response.api.send( {
+							authenticated: true
+						} );
+					} );
 				}
 
 				return Promise.reject( 'PASSWORD_MATCH_FAILED' );
 			} );
-			// .catch( ( error ) => {
-			// 	// TODO: Log error
-			// 	invalid_credentials();
-			// } );
 		} )
 		.catch( ( error ) => {
 			// TODO: Log error
@@ -97,7 +92,17 @@ function login( request, response ) {
 }
 
 function logout( request, response ) {
+	let token = request.header( 'x-token' );
 
+	User.find_by_token( token ).then( ( user ) => {
+		console.log( user );
+		response.api.send( user );
+	} );
+
+	// User.findOne( query )
+	// 	.then( ( user ) => {
+	// 		return user || Promise.reject( 'USER_NOT_FOUND' );
+	// 	} )
 }
 
 module.exports = {
