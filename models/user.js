@@ -74,9 +74,8 @@ user_schema.methods.generate_token = function () {
 user_schema.statics.find_by_token = function ( token ) {
 	return new Promise( ( resolve, reject ) => {
 		let callback = ( error, decode ) => {
-			console.log( decode );
 			resolve( User.findOne( {
-				'id': ObjectId(decode),
+				'_id': ObjectId(decode),
 				'token': token
 			} ) )
 		}

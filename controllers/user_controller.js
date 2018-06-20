@@ -95,14 +95,16 @@ function logout( request, response ) {
 	let token = request.header( 'x-token' );
 
 	User.find_by_token( token ).then( ( user ) => {
-		console.log( user );
-		response.api.send( user );
-	} );
+		response.status( HttpStatusCode.ACCEPTED );
+		response.api.send( {
+			logout: true
+		} );
 
-	// User.findOne( query )
-	// 	.then( ( user ) => {
-	// 		return user || Promise.reject( 'USER_NOT_FOUND' );
-	// 	} )
+	} ).catch( ( error ) => {
+		// TODO: Log error
+		response.status( HttpStatusCode.NOT_FOUND );
+		response.api.send_error( new AppicationError( 'INVALID_TOKEN' ) );
+	} );
 }
 
 module.exports = {
