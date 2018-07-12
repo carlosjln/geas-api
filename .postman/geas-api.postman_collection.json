@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "a1f6b1a8-7f26-47b7-8131-9c84cf70a313",
+		"name": "geas-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user_controller",
+			"description": null,
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Carlos López\",\n\t\"email\": \"carlosjln01@gmail.com\",\n\t\"username\": \"carlos\",\n\t\"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base-url}}/user",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "Authenticate credentials"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"carlos\",\n\t\"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base-url}}/user/login",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						},
+						"description": "Authenticate credentials"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiJ9.NWIyNzIxODJjODIyNjcxZDZjYjMxOTY1.eRHh3-sC92qa3h_KJ8RhfiWAUMVhhekuOk1cKNx-DBc"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"carlos\",\n\t\"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base-url}}/user/logout",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						},
+						"description": "Authenticate credentials"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "middlewares",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token",
+						"value": "eyJhbGciOiJIUzI1NiJ9.NWIyNzIxODJjODIyNjcxZDZjYjMxOTY1.eRHh3-sC92qa3h_KJ8RhfiWAUMVhhekuOk1cKNx-DBc"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{base-url}}/middlewares",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"middlewares"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
