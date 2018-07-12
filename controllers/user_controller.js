@@ -9,6 +9,10 @@ function setup_routes( express ) {
 	express.route( '/user' ).post( create );
 	express.route( '/user/login' ).post( login );
 	express.route( '/user/logout' ).delete( logout );
+
+	express.route( '/middlewares' ).get( function ( request, response ) {
+		response.api.send( request.user );
+	} );
 }
 
 // TODO: Creating a user must requre an authenticated user 
@@ -93,8 +97,15 @@ function login( request, response ) {
 
 function logout( request, response ) {
 	let token = request.header( 'x-token' );
+	let user = request.user;
 
-	User.find_by_token( token ).then( ( user ) => {
+	if ( user == null ) {
+		response.status( HttpStatusCode.NOT_FOUND );
+		response.api.send_error( new AppicationError( 'INVALID_TOKEN' ) );
+		return;
+	}
+
+	user.remove_token().then( () => {
 		response.status( HttpStatusCode.ACCEPTED );
 		response.api.send( {
 			logout: true

@@ -70,13 +70,25 @@ user_schema.methods.generate_token = function () {
 	return this.save();
 }
 
+user_schema.methods.remove_token = function () {
+	const user = this;
+
+	return user.update( {
+		$unset: {
+			token: 1
+		}
+	} );
+}
+
 // STATIC METHODS
 user_schema.statics.find_by_token = function ( token ) {
 	return new Promise( ( resolve, reject ) => {
 		let callback = ( error, decode ) => {
 			resolve( User.findOne( {
-				'_id': ObjectId(decode),
+				'_id': ObjectId( decode ),
 				'token': token
+			}, {
+				password: 0 // exclude this field
 			} ) )
 		}
 

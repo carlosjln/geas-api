@@ -3,6 +3,8 @@
 const UserError = require( '../errors/user-error' );
 
 function setup( express ) {
+	require('../middlewares/').setup_routes( express );
+
 	require( '../controllers/user_controller.js' ).setup_routes( express );
 
 	/**
